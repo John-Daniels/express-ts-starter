@@ -64,7 +64,6 @@ export const updateUser = async (req: any, res: any) => {
         "password",
         "phone",
         "location",
-        "avater",
     ] // this is for later
 
     if (updates.length < 1) respond(res, 200, 'there is nothing to update here!')

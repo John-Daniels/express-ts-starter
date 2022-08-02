@@ -12,7 +12,7 @@ import compression from "compression";
 
 
 // router
-import userRouter from './routers/user.route'
+import userRouter from './routes/user.route'
 
 const app = express();
 const port = process.env.PORT || 5000;
