@@ -25,9 +25,11 @@ export const loginUser = async (req: any, res: any) => {
         const credentials = req.body;
         const user = await (User as any).login(credentials)
 
-        respond(res, 200, 'successfully loggedin user', credentials)
-    } catch ({ message }) {
-        respond(res, 500, 'something went wrong!', message)
+        respond(res, 200, 'successfully loggedin user', user)
+    } catch (e: any) {
+        const message = e.toString().split('Error ')[1]
+
+        respond(res, 400, 'pls provide valid data', message)
     }
 }
 

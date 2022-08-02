@@ -43,6 +43,8 @@
     "_moduleAliases": {
         "@/db": "dist/db",
         "@/middleware": "dist/middleware",
-        "@/model": "dist/model"
+        "@/model": "dist/model",
+        "@/routers": "dist/routers",
+        "@/utils": "dist/utils"
     }
 }

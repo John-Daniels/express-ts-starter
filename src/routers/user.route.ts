@@ -8,7 +8,7 @@ import { verifyToken } from '../middlewares/auth';
 const router = Router()
 
 router.get('/', async (req, res) => {
-    const users = await User.find()
+    const users = await User.find({})
 
     respond(res, 200, 'successfully fetched all Users', users)
 })

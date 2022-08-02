@@ -5,7 +5,7 @@ import User from '../../models/User.model'
 
 export const validateSignup = async (req: any, res: any, next: any) => {
 
-    const { username, email, phone, password } = req.body
+    const { username, email, password } = req.body
     const errors: any = {}
 
     if (!username) {
@@ -22,18 +22,12 @@ export const validateSignup = async (req: any, res: any, next: any) => {
         if (_isDup) errors["email"] = "has been taken"
     }
 
-    if (!phone) {
-        errors["phone"] = "cannot be empty"
-    } else {
-        const _isDup = await isDuplicate({ phone }, User)
-        if (_isDup) {
-            errors["phone"] = "has been used"
-        }
-    }
-
     if (!password) {
         errors["password"] = "cannot be empty"
     }
+
+
+    // add more validator props here
 
     // logic
     if (Object.keys(errors).length > 0) {
@@ -51,21 +45,16 @@ export const validateLogin = async (req: any, res: any, next: any) => {
     const errors: any = {}
 
     if (username) {
-        if (!username) {
+        if (username == '') {
             errors["username"] = "cannot be empty"
-        } else {
-            const _isDup = await isDuplicate({ username }, User)
-            if (_isDup) errors["username"] = "is taken"
         }
-    }
-
-    if (email) {
-        if (!email) {
+    } else if (email) {
+        if (email == '') {
             errors["email"] = "cannot be empty"
-        } else {
-            const _isDup = await isDuplicate({ email }, User)
-            if (_isDup) errors["email"] = "has been taken"
         }
+    } else {
+        errors["username"] = "pls provide a username or email"
+        errors["email"] = "pls provide a email or username"
     }
 
     if (!password) {

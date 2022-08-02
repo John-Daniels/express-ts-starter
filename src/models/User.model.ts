@@ -31,8 +31,8 @@ userSchema.methods.toJSON = function () {
     const user = this
     const userObject = user.toObject();
 
-    delete user.password
-    delete user.tokens
+    delete userObject.password
+    delete userObject.tokens
 
     return userObject
 }
@@ -41,7 +41,7 @@ userSchema.methods.generateAuthToken = async function () {
     const user = this
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SEC)
 
-    user.token.push({ token })
+    user.tokens.push({ token })
     await user.save()
 
     return token
@@ -50,8 +50,10 @@ userSchema.methods.generateAuthToken = async function () {
 
 userSchema.statics.login = async (credentials) => {
     const { password, ...credential } = credentials // life is not hard! (*_*)
-    const user = await User.findOne(credential)
+    const { username, email } = credential
 
+
+    const user = await User.findOne({ [username ? 'username' : 'email']: username || email })
     if (!user) throw new Error('pls provide valid credentials')
 
     const isMatch = await bcrypt.compare(password, user.password)
@@ -60,7 +62,7 @@ userSchema.statics.login = async (credentials) => {
     if (!isMatch) throw new Error('pls provide valid credentials')
 
     // generate the auth token
-    const token = user.generateAuthToken()
+    const token = await user.generateAuthToken()
     const obscuredUser = user.toJSON()
 
     return { ...obscuredUser, token }
